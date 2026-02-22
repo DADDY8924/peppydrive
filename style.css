@@ -1,68 +1,100 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
-/* Base Styles */
-body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    transition: background-color 0.3s ease, color 0.3s ease;
+:root {
+    --primary: #3b82f6;
+    --card-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    --hover-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.2);
 }
 
-/* Glass Navigation Effect */
+/* Base Styles */
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Glass Navigation - Optimized for Safari */
 .glass-nav {
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Premium Card Hover Effects */
 .book-card {
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: var(--card-shadow);
 }
 
 .book-card:hover {
-    transform: translateY(-12px);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: var(--hover-shadow);
 }
 
 /* Background Pattern */
 .bg-pattern {
-    background-image: radial-gradient(#3b82f6 0.5px, transparent 0.5px);
-    background-size: 24px 24px;
-    background-position: 0 0;
-    opacity: 0.05;
+    background-image: radial-gradient(var(--primary) 0.8px, transparent 0.8px);
+    background-size: 32px 32px;
+    opacity: 0.04;
+    pointer-events: none;
 }
-.dark .bg-pattern { opacity: 0.1; }
+.dark .bg-pattern { 
+    opacity: 0.07; 
+    background-image: radial-gradient(#60a5fa 0.8px, transparent 0.8px);
+}
 
-/* --- MOBILE MODAL SCROLL FIX --- */
+/* --- MOBILE MODAL REFINEMENT --- */
 #bookModal {
-    overflow-y: auto;
-    align-items: flex-start; /* Start at top so it doesn't cut off */
-    padding: 20px 0;
-    display: none; /* Controlled by JS */
+    display: none; /* Controlled by JS: use 'flex' to show */
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    overflow-y: auto;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    
+    /* Center content using flex */
+    align-items: center; 
+    justify-content: center;
 }
 
-/* On Desktop, center the modal normally */
-@media (min-width: 768px) {
-    #bookModal {
-        align-items: center;
-        padding: 40px;
-    }
-}
-
-/* Ensure the inner modal content is clickable and doesn't shrink weirdly */
+/* Inner Modal Box */
 #bookModal > div {
-    margin-bottom: 20px;
+    width: 100%;
+    max-width: 500px;
+    margin: auto; /* Keeps it centered even when height grows */
+    position: relative;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
-/* Custom Scrollbar for a cleaner look */
+.dark #bookModal > div {
+    background: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 ::-webkit-scrollbar-track {
-    background: transparent;
+    background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 10px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    border: 2px solid transparent; /* Gives it a "floating" look */
+    background-clip: content-box;
 }
 .dark ::-webkit-scrollbar-thumb {
-    background: #334155;
+    background: #334155;
+}
+
+/* For Mobile: if screen height is short, align to top */
+@media (max-height: 700px) {
+    #bookModal {
+        align-items: flex-start;
+    }
 }

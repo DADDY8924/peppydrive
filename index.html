@@ -257,7 +257,7 @@
 
             grid.innerHTML = data.map(book => `
                 <div class="book-card group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2rem] overflow-hidden flex flex-col h-full shadow-sm">
-                    <div class="relative h-72 overflow-hidden rounded-t-[2rem]">
+                    <div class="relative h-48 overflow-hidden rounded-t-[2rem]">
                         <img src="${book.coverImage}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="${book.title}">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
                             <button onclick="openModal(${book.id})" class="w-full py-3 bg-white text-slate-900 rounded-xl font-bold shadow-xl">Quick View</button>

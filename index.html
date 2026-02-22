@@ -7,8 +7,7 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-
-   <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 
     <script>
         tailwind.config = {
@@ -42,8 +41,6 @@
                 <div class="hidden md:flex items-center gap-8 font-semibold text-sm">
                     <a href="#" class="hover:text-primary transition-colors">Home</a>
                     <a href="#categories" class="hover:text-primary transition-colors">Categories</a>
-                    <a href="#popular" class="hover:text-primary transition-colors">Popular</a>
-                    <a href="#latest" class="hover:text-primary transition-colors">Latest</a>
                 </div>
 
                 <div class="flex items-center border-l border-slate-200 dark:border-slate-800 pl-6">
@@ -59,26 +56,16 @@
     <header class="relative py-24 px-6 overflow-hidden">
         <div class="absolute inset-0 bg-pattern"></div>
         <div class="container mx-auto max-w-4xl text-center relative z-10">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold mb-6 border border-primary/20">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-                </span>
-                100% Free Knowledge Base
-            </div>
             <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-primary to-secondary dark:from-white dark:via-blue-400 dark:to-indigo-400">
                 Read, Learn, Grow.
             </h1>
-            <p class="text-slate-500 dark:text-slate-400 mb-10 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-                Discover a curated collection of high-quality PDFs across technology, business, and literature.
-            </p>
             
             <div class="relative max-w-2xl mx-auto group">
                 <div class="absolute inset-y-0 left-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
                     <i data-lucide="search" class="h-6 w-6"></i>
                 </div>
                 <input type="text" id="searchInput" onkeyup="handleSearch()"
-                    placeholder="Search for books, authors, or topics..." 
+                    placeholder="Search for books..." 
                     class="w-full pl-14 pr-6 py-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none text-lg transition-all">
             </div>
         </div>
@@ -99,68 +86,29 @@
     <main class="container mx-auto max-w-7xl py-12 px-6 flex-grow">
         <div id="bookGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10"></div>
         <div id="noResults" class="hidden text-center py-32">
-            <div class="bg-slate-100 dark:bg-slate-900 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                <i data-lucide="search-x" class="h-10 w-10 text-slate-400"></i>
-            </div>
+            <i data-lucide="search-x" class="h-10 w-10 text-slate-400 mx-auto mb-6"></i>
             <h3 class="text-xl font-bold">No results found</h3>
-            <p class="text-slate-500 mt-2">Try adjusting your search or category filter.</p>
         </div>
     </main>
 
-    <div id="bookModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md transition-opacity">
-        <div class="bg-white dark:bg-slate-900 w-full max-w-4xl rounded-[2.5rem] shadow-2xl overflow-hidden relative animate-in fade-in zoom-in duration-300">
-            <button onclick="closeModal()" class="absolute top-6 right-6 z-10 p-2 bg-slate-100 dark:bg-slate-800 hover:bg-red-500 hover:text-white rounded-full transition-all">
-                <i data-lucide="x" class="h-6 w-6"></i>
+    <div id="bookModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-950/90 backdrop-blur-sm transition-all">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-[2rem] shadow-2xl overflow-hidden relative animate-in zoom-in duration-300">
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-20 p-2 bg-slate-100 dark:bg-slate-800 hover:bg-red-500 hover:text-white rounded-full transition-all">
+                <i data-lucide="x" class="h-5 w-5"></i>
             </button>
-            <div id="modalContent" class="flex flex-col md:flex-row"></div>
+            <div id="modalContent"></div>
         </div>
     </div>
 
-    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-16 px-6">
-        <div class="container mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-4 gap-12">
-            <div>
-                <div class="flex items-center gap-2 mb-6">
-                    <div class="bg-primary p-1.5 rounded-lg text-white"><i data-lucide="book-marked" class="h-5 w-5"></i></div>
-                    <span class="text-xl font-bold">PeppyDrive</span>
-                </div>
-                <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-                    Making the world's information accessible through a clean, modern PDF portal.
-                </p>
-            </div>
-            <div>
-                <h4 class="font-bold mb-6 text-sm uppercase tracking-widest text-primary">Resources</h4>
-                <ul class="text-sm text-slate-500 dark:text-slate-400 space-y-4">
-                    <li><a href="#" class="hover:text-primary">Documentation</a></li>
-                    <li><a href="#" class="hover:text-primary">Help Center</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold mb-6 text-sm uppercase tracking-widest text-primary">Company</h4>
-                <ul class="text-sm text-slate-500 dark:text-slate-400 space-y-4">
-                    <li><a href="#" class="hover:text-primary">About Us</a></li>
-                    <li><a href="#" class="hover:text-primary">Contact</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold mb-6 text-sm uppercase tracking-widest text-primary">Legal</h4>
-                <ul class="text-sm text-slate-500 dark:text-slate-400 space-y-4">
-                    <li><a href="#" class="hover:text-primary">Privacy Policy</a></li>
-                </ul>
-            </div>
-        </div>
-    </footer>
-
-   <script type="module">
+    <script type="module">
         import { books } from './data.js';
 
-        // 1. Initialize the site
         function init() {
             renderBooks(books);
             updateCounters();
             lucide.createIcons();
         }
 
-        // 2. Render the books into the grid
         function renderBooks(data) {
             const grid = document.getElementById('bookGrid');
             const noRes = document.getElementById('noResults');
@@ -176,7 +124,7 @@
             grid.innerHTML = data.map(book => `
                 <div class="book-card group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2rem] overflow-hidden flex flex-col h-full shadow-sm">
                     <div class="relative h-72 overflow-hidden">
-                        <img src="${book.coverImage}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="${book.title}">
+                        <img src="${book.coverImage}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
                             <button onclick="openModal(${book.id})" class="w-full py-3 bg-white text-slate-900 rounded-xl font-bold shadow-xl">Quick View</button>
                         </div>
@@ -184,25 +132,19 @@
                             <span class="px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-full text-[10px] font-bold text-primary uppercase border border-primary/20">${book.category}</span>
                         </div>
                     </div>
-                    <div class="p-6 flex-grow">
-                        <h3 class="text-xl font-bold mb-1 truncate group-hover:text-primary transition-colors">${book.title}</h3>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1 truncate">${book.title}</h3>
                         <p class="text-xs text-slate-400 font-medium mb-4">by ${book.author}</p>
-                        <div class="flex items-center justify-between text-[10px] font-bold text-slate-500 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl">
-                            <span class="flex items-center gap-1.5"><i data-lucide="layers" class="h-3.5 w-3.5 text-primary"></i> ${book.pages} Pages</span>
-                            <span class="flex items-center gap-1.5"><i data-lucide="database" class="h-3.5 w-3.5 text-primary"></i> ${book.fileSize}</span>
-                        </div>
                     </div>
                 </div>
             `).join('');
             lucide.createIcons();
         }
 
-        // 3. Update the numbers on the category buttons
         function updateCounters() {
             const categories = ['All', 'Technology', 'Business', 'Fiction', 'Health'];
             categories.forEach(cat => {
                 const count = cat === 'All' ? books.length : books.filter(b => b.category === cat).length;
-                // Note: This matches the text in your buttons
                 const buttons = Array.from(document.querySelectorAll('.cat-btn'));
                 const targetBtn = buttons.find(btn => btn.innerText.includes(cat) || (cat === 'All' && btn.innerText.includes('Library')));
                 if (targetBtn && !targetBtn.querySelector('.count-badge')) {
@@ -211,90 +153,84 @@
             });
         }
 
-        // 4. Search and Filter Logic
         function handleSearch() {
             const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = books.filter(b => 
-                b.title.toLowerCase().includes(query) || 
-                b.author.toLowerCase().includes(query)
-            );
-            renderBooks(filtered);
+            renderBooks(books.filter(b => b.title.toLowerCase().includes(query) || b.author.toLowerCase().includes(query)));
         }
 
         function filterCategory(cat) {
             const btns = document.querySelectorAll('.cat-btn');
             btns.forEach(btn => {
-                btn.classList.remove('bg-primary', 'text-white', 'shadow-lg');
+                btn.classList.remove('bg-primary', 'text-white');
                 btn.classList.add('bg-white', 'dark:bg-slate-900');
                 if(btn.innerText.includes(cat) || (cat === 'All' && btn.innerText.includes('Library'))) {
-                    btn.classList.add('bg-primary', 'text-white', 'shadow-lg');
-                    btn.classList.remove('bg-white', 'dark:bg-slate-900');
+                    btn.classList.add('bg-primary', 'text-white');
                 }
             });
             renderBooks(cat === 'All' ? books : books.filter(b => b.category === cat));
         }
 
-        // 5. Modal Logic
+        // --- FIXED MODAL FUNCTION FOR MOBILE ---
         function openModal(id) {
-    const book = books.find(b => b.id === id);
-    const content = document.getElementById('modalContent');
-    
-    // We use 'w-32' (8rem) on mobile and 'md:w-full' on desktop
-    // We also use 'p-4' instead of 'p-8' to save space
-    content.innerHTML = `
-        <div class="w-full md:w-2/5 p-4 md:p-8 bg-slate-50 dark:bg-slate-800 flex items-center justify-center">
-            <img src="${book.coverImage}" class="w-32 md:w-full h-auto max-h-[200px] md:max-h-[500px] object-cover rounded-xl shadow-lg">
-        </div>
-        <div class="w-full md:w-3/5 p-6 md:p-12 flex flex-col justify-center">
-            <h2 class="text-2xl md:text-3xl font-black mb-2">${book.title}</h2>
-            <p class="text-sm text-slate-500 mb-4 line-clamp-3 md:line-clamp-none">${book.description}</p>
+            const book = books.find(b => b.id === id);
+            const content = document.getElementById('modalContent');
             
-            <div class="flex gap-4 mb-6">
-                <div class="bg-slate-100 dark:bg-slate-800 p-2 rounded-lg flex-1 text-center">
-                    <span class="text-[10px] block text-slate-400">PAGES</span>
-                    <span class="font-bold text-sm">${book.pages}</span>
-                </div>
-                <div class="bg-slate-100 dark:bg-slate-800 p-2 rounded-lg flex-1 text-center">
-                    <span class="text-[10px] block text-slate-400">SIZE</span>
-                    <span class="font-bold text-sm">${book.fileSize}</span>
-                </div>
-            </div>
+            content.innerHTML = `
+                <div class="flex flex-col w-full p-6 bg-white dark:bg-slate-900">
+                    <div class="flex gap-4 mb-6">
+                        <div class="w-1/3 shrink-0">
+                            <img src="${book.coverImage}" class="w-full h-auto rounded-xl shadow-md border border-slate-100 dark:border-slate-800">
+                        </div>
+                        <div class="w-2/3 flex flex-col justify-center">
+                            <span class="text-primary text-[10px] font-bold uppercase tracking-widest mb-1">${book.category}</span>
+                            <h2 class="text-xl font-bold leading-tight mb-1 text-slate-900 dark:text-white">${book.title}</h2>
+                            <p class="text-xs text-slate-500">By ${book.author}</p>
+                        </div>
+                    </div>
 
-            <a href="${book.pdfUrl}" target="_blank" class="py-4 bg-primary text-white rounded-2xl font-bold text-center shadow-lg active:scale-95 transition-transform">
-                Download PDF
-            </a>
-        </div>`;
-        
-    document.getElementById('bookModal').classList.remove('hidden');
-    document.getElementById('bookModal').classList.add('flex');
-    lucide.createIcons();
-}
+                    <a href="${book.pdfUrl}" target="_blank" 
+                       class="w-full py-4 bg-[#00a884] hover:bg-[#008f70] text-white rounded-xl font-bold flex items-center justify-center gap-3 shadow-lg mb-6 transition-all active:scale-95">
+                        <i data-lucide="download" class="h-5 w-5"></i>
+                        DOWNLOAD PDF
+                    </a>
 
-        // 6. Theme Logic
-        function toggleDarkMode() {
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                        <div class="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
+                            <span class="text-[10px] text-slate-400 block uppercase font-bold mb-1">Language</span>
+                            <span class="text-sm font-semibold">${book.language || 'English'}</span>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
+                            <span class="text-[10px] text-slate-400 block uppercase font-bold mb-1">Page Count</span>
+                            <span class="text-sm font-semibold">${book.pages}</span>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-100 dark:border-slate-800 pt-4">
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-3">
+                            ${book.description}
+                        </p>
+                    </div>
+                </div>`;
+            
+            document.getElementById('bookModal').classList.remove('hidden');
+            document.getElementById('bookModal').classList.add('flex');
+            lucide.createIcons();
+        }
+
+        window.closeModal = () => document.getElementById('bookModal').classList.add('hidden');
+        window.toggleDarkMode = () => {
             const html = document.documentElement;
             html.classList.toggle('dark');
             const isDark = html.classList.contains('dark');
             document.getElementById('sun-icon').classList.toggle('hidden', isDark);
             document.getElementById('moon-icon').classList.toggle('hidden', !isDark);
-        }
+        };
 
-        // 7. EXPOSE TO WINDOW
-        // This is necessary because modules have private scope
-        window.toggleDarkMode = toggleDarkMode;
         window.filterCategory = filterCategory;
         window.openModal = openModal;
-        window.closeModal = closeModal;
         window.handleSearch = handleSearch;
 
-        // Run the app
         init();
     </script>
 </body>
-
 </html>
-
-
-
-
-

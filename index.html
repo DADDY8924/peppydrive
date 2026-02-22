@@ -186,29 +186,151 @@
         </div>
     </footer>
 
-    <script type="module">
+   <script type="module">
         import { books } from './data.js';
 
-        // All your functions (init, renderBooks, toggleDarkMode, etc.) 
-        // go here. Just make sure the 'books' array is NOT inside them.
-
-        function init() { 
-            renderBooks(books); 
-            lucide.createIcons(); 
+        // 1. Initialize the site
+        function init() {
+            renderBooks(books);
+            updateCounters();
+            lucide.createIcons();
         }
 
-        // ... (rest of your existing functions)
+        // 2. Render the books into the grid
+        function renderBooks(data) {
+            const grid = document.getElementById('bookGrid');
+            const noRes = document.getElementById('noResults');
+            
+            if (data.length === 0) {
+                grid.classList.add('hidden');
+                noRes.classList.remove('hidden');
+            } else {
+                grid.classList.remove('hidden');
+                noRes.classList.add('hidden');
+            }
 
-        // IMPORTANT: Because we use type="module", we must attach 
-        // click functions to the 'window' object so the buttons can find them:
+            grid.innerHTML = data.map(book => `
+                <div class="book-card group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2rem] overflow-hidden flex flex-col h-full shadow-sm">
+                    <div class="relative h-72 overflow-hidden">
+                        <img src="${book.coverImage}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="${book.title}">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                            <button onclick="openModal(${book.id})" class="w-full py-3 bg-white text-slate-900 rounded-xl font-bold shadow-xl">Quick View</button>
+                        </div>
+                        <div class="absolute top-4 left-4">
+                            <span class="px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-full text-[10px] font-bold text-primary uppercase border border-primary/20">${book.category}</span>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow">
+                        <h3 class="text-xl font-bold mb-1 truncate group-hover:text-primary transition-colors">${book.title}</h3>
+                        <p class="text-xs text-slate-400 font-medium mb-4">by ${book.author}</p>
+                        <div class="flex items-center justify-between text-[10px] font-bold text-slate-500 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl">
+                            <span class="flex items-center gap-1.5"><i data-lucide="layers" class="h-3.5 w-3.5 text-primary"></i> ${book.pages} Pages</span>
+                            <span class="flex items-center gap-1.5"><i data-lucide="database" class="h-3.5 w-3.5 text-primary"></i> ${book.fileSize}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // 3. Update the numbers on the category buttons
+        function updateCounters() {
+            const categories = ['All', 'Technology', 'Business', 'Fiction', 'Health'];
+            categories.forEach(cat => {
+                const count = cat === 'All' ? books.length : books.filter(b => b.category === cat).length;
+                // Note: This matches the text in your buttons
+                const buttons = Array.from(document.querySelectorAll('.cat-btn'));
+                const targetBtn = buttons.find(btn => btn.innerText.includes(cat) || (cat === 'All' && btn.innerText.includes('Library')));
+                if (targetBtn && !targetBtn.querySelector('.count-badge')) {
+                    targetBtn.innerHTML += ` <span class="count-badge ml-1 opacity-60">(${count})</span>`;
+                }
+            });
+        }
+
+        // 4. Search and Filter Logic
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = books.filter(b => 
+                b.title.toLowerCase().includes(query) || 
+                b.author.toLowerCase().includes(query)
+            );
+            renderBooks(filtered);
+        }
+
+        function filterCategory(cat) {
+            const btns = document.querySelectorAll('.cat-btn');
+            btns.forEach(btn => {
+                btn.classList.remove('bg-primary', 'text-white', 'shadow-lg');
+                btn.classList.add('bg-white', 'dark:bg-slate-900');
+                if(btn.innerText.includes(cat) || (cat === 'All' && btn.innerText.includes('Library'))) {
+                    btn.classList.add('bg-primary', 'text-white', 'shadow-lg');
+                    btn.classList.remove('bg-white', 'dark:bg-slate-900');
+                }
+            });
+            renderBooks(cat === 'All' ? books : books.filter(b => b.category === cat));
+        }
+
+        // 5. Modal Logic
+        function openModal(id) {
+            const book = books.find(b => b.id === id);
+            const modal = document.getElementById('bookModal');
+            const content = document.getElementById('modalContent');
+            content.innerHTML = `
+                <div class="md:w-2/5 p-8 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center">
+                    <img src="${book.coverImage}" class="w-full h-auto max-h-[500px] object-cover rounded-[2rem] shadow-2xl rotate-2">
+                </div>
+                <div class="md:w-3/5 p-8 md:p-12 flex flex-col justify-center">
+                    <span class="text-primary font-bold uppercase tracking-[0.2em] text-xs mb-4">${book.category}</span>
+                    <h2 class="text-4xl font-black mb-4 leading-tight">${book.title}</h2>
+                    <p class="text-slate-400 mb-8 leading-relaxed italic">"By ${book.author}."</p>
+                    <div class="grid grid-cols-2 gap-4 mb-10">
+                        <div class="p-4 border border-slate-100 dark:border-slate-800 rounded-2xl">
+                            <span class="text-[10px] text-slate-400 block uppercase mb-1">Language</span>
+                            <span class="font-bold">${book.language}</span>
+                        </div>
+                        <div class="p-4 border border-slate-100 dark:border-slate-800 rounded-2xl">
+                            <span class="text-[10px] text-slate-400 block uppercase mb-1">Page Count</span>
+                            <span class="font-bold">${book.pages}</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-500 dark:text-slate-400 mb-10 leading-relaxed">${book.description}</p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="${book.pdfUrl}" target="_blank" class="flex-grow py-5 bg-primary hover:bg-blue-600 text-white rounded-2xl font-bold text-center shadow-xl flex items-center justify-center gap-3">
+                            <i data-lucide="download-cloud" class="h-5 w-5"></i> Download PDF
+                        </a>
+                        <button onclick="closeModal()" class="py-5 px-8 bg-slate-100 dark:bg-slate-800 font-bold rounded-2xl hover:bg-slate-200 transition-all">Close</button>
+                    </div>
+                </div>`;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            document.getElementById('bookModal').classList.add('hidden');
+        }
+
+        // 6. Theme Logic
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            const isDark = html.classList.contains('dark');
+            document.getElementById('sun-icon').classList.toggle('hidden', isDark);
+            document.getElementById('moon-icon').classList.toggle('hidden', !isDark);
+        }
+
+        // 7. EXPOSE TO WINDOW
+        // This is necessary because modules have private scope
         window.toggleDarkMode = toggleDarkMode;
         window.filterCategory = filterCategory;
         window.openModal = openModal;
         window.closeModal = closeModal;
         window.handleSearch = handleSearch;
 
+        // Run the app
         init();
     </script>
 </body>
 
 </html>
+

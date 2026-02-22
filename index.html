@@ -1,1 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PeppyDrive | Your Smart PDF Library</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .glass-nav {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .book-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .book-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;  
+            overflow: hidden;
+        }
+
+        .bg-pattern {
+            background-image: radial-gradient(#3b82f6 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            background-position: 0 0;
+            opacity: 0.05;
+        }
+        .dark .bg-pattern { opacity: 0.1; }
+    </style>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#6366f1',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+
+    <nav class="sticky top-0 z-[60] w-full border-b border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 glass-nav">
+        <div class="container mx-auto max-w-7xl flex h-20 items-center justify-between px-6">
+            <div class="flex items-center gap-3">
+                <div class="bg-gradient-to-tr from-primary to-secondary p-2 rounded-xl text-white shadow-lg shadow-primary/20">
+                    <i data-lucide="book-marked" class="h-6 w-6"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-extrabold tracking-tight block leading-none">PeppyDrive</span>
+                    <span class="text-[10px] text-primary font-bold uppercase tracking-widest">Your Smart PDF Library</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-8">
+                <div class="hidden md:flex items-center gap-8 font-semibold text-sm">
+                    <a href="#" class="hover:text-primary transition-colors">Home</a>
+                    <a href="#categories" class="hover:text-primary transition-colors">Categories</a>
+                    <a href="#popular" class="hover:text-primary transition-colors">Popular</a>
+                    <a href="#latest" class="hover:text-primary transition-colors">Latest</a>
+                </div>
+
+                <div class="flex items-center border-l border-slate-200 dark:border-slate-800 pl-6">
+                    <button onclick="toggleDarkMode()" class="p-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all">
+                        <i data-lucide="sun" id="sun-icon" class="h-5 w-5"></i>
+                        <i data-lucide="moon" id="moon-icon" class="h-5 w-5 hidden"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative py-24 px-6 overflow-hidden">
+        <div class="absolute inset-0 bg-pattern"></div>
+        <div class="container mx-auto max-w-4xl text-center relative z-10">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold mb-6 border border-primary/20">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                </span>
+                100% Free Knowledge Base
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-primary to-secondary dark:from-white dark:via-blue-400 dark:to-indigo-400">
+                Read, Learn, Grow.
+            </h1>
+            <p class="text-slate-500 dark:text-slate-400 mb-10 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+                Discover a curated collection of high-quality PDFs across technology, business, and literature.
+            </p>
+            
+            <div class="relative max-w-2xl mx-auto group">
+                <div class="absolute inset-y-0 left-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
+                    <i data-lucide="search" class="h-6 w-6"></i>
+                </div>
+                <input type="text" id="searchInput" onkeyup="handleSearch()"
+                    placeholder="Search for books, authors, or topics..." 
+                    class="w-full pl-14 pr-6 py-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none text-lg transition-all">
+            </div>
+        </div>
+    </header>
+
+    <section id="categories" class="pb-12 bg-slate-50 dark:bg-slate-950">
+        <div class="container mx-auto max-w-7xl px-6">
+            <div class="flex flex-wrap justify-center gap-3">
+                <button onclick="filterCategory('All')" class="cat-btn active px-6 py-2.5 rounded-xl bg-primary text-white text-sm font-bold shadow-lg shadow-primary/20">All Library</button>
+                <button onclick="filterCategory('Technology')" class="cat-btn px-6 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm font-bold hover:border-primary transition-all">Technology</button>
+                <button onclick="filterCategory('Business')" class="cat-btn px-6 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm font-bold hover:border-primary transition-all">Business</button>
+                <button onclick="filterCategory('Fiction')" class="cat-btn px-6 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm font-bold hover:border-primary transition-all">Fiction</button>
+                <button onclick="filterCategory('Health')" class="cat-btn px-6 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm font-bold hover:border-primary transition-all">Health</button>
+            </div>
+        </div>
+    </section>
+
+    <main class="container mx-auto max-w-7xl py-12 px-6 flex-grow">
+        <div id="bookGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10"></div>
+        <div id="noResults" class="hidden text-center py-32">
+            <div class="bg-slate-100 dark:bg-slate-900 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="search-x" class="h-10 w-10 text-slate-400"></i>
+            </div>
+            <h3 class="text-xl font-bold">No results found</h3>
+            <p class="text-slate-500 mt-2">Try adjusting your search or category filter.</p>
+        </div>
+    </main>
+
+    <div id="bookModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md transition-opacity">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-4xl rounded-[2.5rem] shadow-2xl overflow-hidden relative animate-in fade-in zoom-in duration-300">
+            <button onclick="closeModal()" class="absolute top-6 right-6 z-10 p-2 bg-slate-100 dark:bg-slate-800 hover:bg-red-500 hover:text-white rounded-full transition-all">
+                <i data-lucide="x" class="h-6 w-6"></i>
+            </button>
+            <div id="modalContent" class="flex flex-col md:flex-row"></div>
+        </div>
+    </div>
+
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-16 px-6">
+        <div class="container mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div>
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="bg-primary p-1.5 rounded-lg text-white"><i data-lucide="book-marked" class="h-5 w-5"></i></div>
+                    <span class="text-xl font-bold">PeppyDrive</span>
+                </div>
+                <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                    Making the world's information accessible through a clean, modern PDF portal.
+                </p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6 text-sm uppercase tracking-widest text-primary">Resources</h4>
+                <ul class="text-sm text-slate-500 dark:text-slate-400 space-y-4">
+                    <li><a href="#" class="hover:text-primary">Documentation</a></li>
+                    <li><a href="#" class="hover:text-primary">Help Center</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6 text-sm uppercase tracking-widest text-primary">Company</h4>
+                <ul class="text-sm text-slate-500 dark:text-slate-400 space-y-4">
+                    <li><a href="#" class="hover:text-primary">About Us</a></li>
+                    <li><a href="#" class="hover:text-primary">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6 text-sm uppercase tracking-widest text-primary">Legal</h4>
+                <ul class="text-sm text-slate-500 dark:text-slate-400 space-y-4">
+                    <li><a href="#" class="hover:text-primary">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // UPDATED: 8 Books with fixed images
+        const books = [
+            {
+                id: 1, title: "Mastering React 18", author: "Sarah Drasner", category: "Technology",
+                description: "The complete guide to React hooks and concurrent mode.",
+                pages: 450, language: "English", fileSize: "4.2 MB",
+                coverImage: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=500&h=700&fit=crop",
+                pdfUrl: "#"
+            },
+            {
+                id: 2, title: "Financial Freedom", author: "Grant Sabatier", category: "Business",
+                description: "Proven wealth-building strategies for early retirement.",
+                pages: 312, language: "English", fileSize: "2.8 MB",
+                coverImage: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=500&h=700&fit=crop",
+                pdfUrl: "#"
+            },
+            {
+                id: 3, title: "The Midnight Woods", author: "Elias Thorne", category: "Fiction",
+                description: "A gripping mystery thriller set in deep, ancient forests.",
+                pages: 380, language: "English", fileSize: "1.5 MB",
+                coverImage: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=500&h=700&fit=crop",
+                pdfUrl: "#"
+            },
+            {
+                id: 4, title: "Clean Code", author: "Robert C. Martin", category: "Technology",
+                description: "A handbook of agile software craftsmanship.",
+                pages: 464, language: "English", fileSize: "12.4 MB",
+                coverImage: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=500&h=700&fit=crop",
+                pdfUrl: "#"
+            },
+            {
+                id: 5, title: "Psychology of Money", author: "Morgan Housel", category: "Business",
+                description: "Timeless lessons on wealth, greed, and happiness.",
+                pages: 252, language: "English", fileSize: "3.1 MB",
+                coverImage: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=500&h=700&fit=crop",
+                pdfUrl: "#"
+            },
+            {
+                id: 6, title: "Plant-Based Living", author: "Dr. Julianne Moore", category: "Health",
+                description: "A comprehensive guide to transitioning to a plant-based lifestyle.",
+                pages: 215, language: "English", fileSize: "8.5 MB",
+                coverImage: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&h=700&fit=crop",
+                pdfUrl: "#"
+            },
+            {
+                id: 7, title: "Atomic Habits", author: "James Clear", category: "Health",
+                description: "Tiny changes, remarkable results in building better habits.",
+                pages: 320, language: "English", fileSize: "2.5 MB",
+                coverImage: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&h=700&fit=crop",
+                pdfUrl: "#"
+            },
+            {
+                id: 8, title: "The Alchemist", author: "Paulo Coelho", category: "Fiction",
+                description: "A magical story about following your dreams and listening to your heart.",
+                pages: 208, language: "English", fileSize: "1.1 MB",
+                coverImage: "https://images.unsplash.com/photo-1589998059171-988d887df646?w=500&h=700&fit=crop",
+                pdfUrl: "#"
+            }
+        ];
+
+        function init() { renderBooks(books); lucide.createIcons(); }
+
+        function renderBooks(data) {
+            const grid = document.getElementById('bookGrid');
+            const noRes = document.getElementById('noResults');
+            if(data.length === 0) { grid.classList.add('hidden'); noRes.classList.remove('hidden'); } 
+            else { grid.classList.remove('hidden'); noRes.classList.add('hidden'); }
+
+            grid.innerHTML = data.map(book => `
+                <div class="book-card group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2rem] overflow-hidden flex flex-col h-full shadow-sm">
+                    <div class="relative h-72 overflow-hidden">
+                        <img src="${book.coverImage}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="${book.title}">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                            <button onclick="openModal(${book.id})" class="w-full py-3 bg-white text-slate-900 rounded-xl font-bold shadow-xl">Quick View</button>
+                        </div>
+                        <div class="absolute top-4 left-4">
+                            <span class="px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-full text-[10px] font-bold text-primary uppercase border border-primary/20">${book.category}</span>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow">
+                        <h3 class="text-xl font-bold mb-1 truncate group-hover:text-primary transition-colors">${book.title}</h3>
+                        <p class="text-xs text-slate-400 font-medium mb-4">by ${book.author}</p>
+                        <div class="flex items-center justify-between text-[10px] font-bold text-slate-500 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl">
+                            <span class="flex items-center gap-1.5"><i data-lucide="layers" class="h-3.5 w-3.5 text-primary"></i> ${book.pages} Pages</span>
+                            <span class="flex items-center gap-1.5"><i data-lucide="database" class="h-3.5 w-3.5 text-primary"></i> ${book.fileSize}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            renderBooks(books.filter(b => b.title.toLowerCase().includes(query) || b.author.toLowerCase().includes(query)));
+        }
+
+        function filterCategory(cat) {
+            const btns = document.querySelectorAll('.cat-btn');
+            btns.forEach(btn => {
+                btn.classList.remove('bg-primary', 'text-white', 'shadow-lg');
+                btn.classList.add('bg-white', 'dark:bg-slate-900');
+                if(btn.innerText.includes(cat)) {
+                    btn.classList.add('bg-primary', 'text-white', 'shadow-lg');
+                    btn.classList.remove('bg-white', 'dark:bg-slate-900');
+                }
+            });
+            renderBooks(cat === 'All' ? books : books.filter(b => b.category === cat));
+        }
+
+        function openModal(id) {
+            const book = books.find(b => b.id === id);
+            const modal = document.getElementById('bookModal');
+            const content = document.getElementById('modalContent');
+            content.innerHTML = `
+                <div class="md:w-2/5 p-8 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center">
+                    <img src="${book.coverImage}" class="w-full h-auto max-h-[500px] object-cover rounded-[2rem] shadow-2xl rotate-2">
+                </div>
+                <div class="md:w-3/5 p-8 md:p-12 flex flex-col justify-center">
+                    <span class="text-primary font-bold uppercase tracking-[0.2em] text-xs mb-4">${book.category}</span>
+                    <h2 class="text-4xl font-black mb-4 leading-tight">${book.title}</h2>
+                    <p class="text-slate-400 mb-8 leading-relaxed italic">"By ${book.author}."</p>
+                    <div class="grid grid-cols-2 gap-4 mb-10">
+                        <div class="p-4 border border-slate-100 dark:border-slate-800 rounded-2xl">
+                            <span class="text-[10px] text-slate-400 block uppercase mb-1">Language</span>
+                            <span class="font-bold">${book.language}</span>
+                        </div>
+                        <div class="p-4 border border-slate-100 dark:border-slate-800 rounded-2xl">
+                            <span class="text-[10px] text-slate-400 block uppercase mb-1">Page Count</span>
+                            <span class="font-bold">${book.pages}</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-500 dark:text-slate-400 mb-10 leading-relaxed">${book.description}</p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="${book.pdfUrl}" target="_blank" class="flex-grow py-5 bg-primary hover:bg-blue-600 text-white rounded-2xl font-bold text-center shadow-xl flex items-center justify-center gap-3">
+                            <i data-lucide="download-cloud" class="h-5 w-5"></i> Download PDF
+                        </a>
+                        <button onclick="closeModal()" class="py-5 px-8 bg-slate-100 dark:bg-slate-800 font-bold rounded-2xl hover:bg-slate-200 transition-all">Close</button>
+                    </div>
+                </div>`;
+            modal.classList.remove('hidden'); modal.classList.add('flex'); lucide.createIcons();
+        }
+
+        function closeModal() { document.getElementById('bookModal').classList.add('hidden'); }
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            const isDark = html.classList.contains('dark');
+            document.getElementById('sun-icon').classList.toggle('hidden', isDark);
+            document.getElementById('moon-icon').classList.toggle('hidden', !isDark);
+        }
+
+        init();
+    </script>
+</body>
+</html>

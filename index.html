@@ -198,11 +198,11 @@
         // UPDATED: 8 Books with fixed images
         const books = [
             {
-                id: 1, title: "Mastering React 18", author: "Sarah Drasner", category: "Technology",
+                id: 1, title: "Gunaho ka Devta", author: "Dharamvir Bharati", category: "Technology",
                 description: "The complete guide to React hooks and concurrent mode.",
                 pages: 450, language: "English", fileSize: "4.2 MB",
-                coverImage: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=500&h=700&fit=crop",
-                pdfUrl: "#"
+                coverImage: "https://archive.org/services/img/gunahon-ka-devta-by-dharmaveer-bharti",
+                pdfUrl: "https://ia902302.us.archive.org/0/items/gunahon-ka-devta-by-dharmaveer-bharti/गुनाहों%20का%20देवता%20%20Gunahon%20Ka%20Devta%20by%20धर्मवीर%20भारती%2C%20Dharmaveer%20Bharti.pdf"
             },
             {
                 id: 2, title: "Financial Freedom", author: "Grant Sabatier", category: "Business",
@@ -247,12 +247,19 @@
                 pdfUrl: "#"
             },
             {
-                id: 8, title: "The Alchemist", author: "Paulo Coelho", category: "Fiction",
-                description: "A magical story about following your dreams and listening to your heart.",
-                pages: 208, language: "English", fileSize: "1.1 MB",
-                coverImage: "https://images.unsplash.com/photo-1589998059171-988d887df646?w=500&h=700&fit=crop",
-                pdfUrl: "#"
-            }
+        id: 8,
+        title: "The Alchemist",
+        author: "Paulo Coelho",
+        category: "Fiction",
+        description: "A magical story about Santiago, an Andalusian shepherd boy who yearns to travel in search of a worldly treasure.",
+        pages: 208,
+        language: "English",
+        fileSize: "1.1 MB",
+        // Direct image link for the cover
+        coverImage: "https://images.unsplash.com/photo-1589998059171-988d887df646?w=500&h=700&fit=crop",
+        // MODIFIED DIRECT DOWNLOAD LINK:
+        pdfUrl: "https://drive.google.com/file/d/1HdYnGpJCsFrHbTk7THDYMpNgwWhDq6pz/view?usp=sharing"
+    }
         ];
 
         function init() { renderBooks(books); lucide.createIcons(); }
@@ -266,10 +273,8 @@
             grid.innerHTML = data.map(book => `
                 <div class="book-card group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2rem] overflow-hidden flex flex-col h-full shadow-sm">
                     <div class="relative h-48 overflow-hidden rounded-t-[2rem]">
-                        <img src="${book.coverImage}" class="w-full h-auto max-h-[400px] md:max-h-[500px] object-contain rounded-[2rem] shadow-2xl">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
-                            <button onclick="openModal(${book.id})" class="w-full py-3 bg-white text-slate-900 rounded-xl font-bold shadow-xl">Quick View</button>
-                        </div>
+                        <img src="${book.coverImage}" onclick="openModal(${book.id})" class="cursor-pointer w-full h-auto max-h-[400px] md:max-h-[500px] object-contain rounded-[2rem] shadow-2xl">
+                        
                         <div class="absolute top-4 left-4">
                             <span class="px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-full text-[10px] font-bold text-primary uppercase border border-primary/20">${book.category}</span>
                         </div>
@@ -344,7 +349,7 @@
                     <a href="${book.pdfUrl}" target="_blank" 
                        class="w-full py-3 md:py-4 bg-primary hover:bg-blue-600 text-white rounded-xl md:rounded-2xl font-bold text-center shadow-lg flex items-center justify-center gap-2 md:gap-3 text-[11px] md:text-base transition-all active:scale-95">
                         <i data-lucide="download-cloud" class="h-4 w-4 md:h-5 md:w-5"></i> Download PDF
-                    </a>
+                    </a>    
                 </div>
             </div>
         </div>
